@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% block title %}Add Student{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Add Student</h2>
+  <form method="POST">
+    <!-- Enrollment No -->
+    <div class="mb-3">
+      <label class="form-label">Enrollment No.</label>
+      <input type="text" class="form-control" name="enrollment_no" required />
+    </div>
+
+    <!-- Registration No -->
+    <div class="mb-3">
+      <label class="form-label">Registration No.</label>
+      <input type="text" class="form-control" name="registration_no" required />
+    </div>
+
+    <!-- Name -->
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" name="name" required />
+    </div>
+
+    <!-- Parentage -->
+    <div class="mb-3">
+      <label class="form-label">Parentage</label>
+      <input type="text" class="form-control" name="parentage" required />
+    </div>
+
+    <!-- DOB -->
+    <div class="mb-3">
+      <label class="form-label">Date of Birth</label>
+      <input type="date" class="form-control" name="dob" required />
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+      <label class="form-label">Category</label>
+      <input type="text" class="form-control" name="category" required />
+    </div>
+
+    <!-- Gender -->
+    <div class="mb-3">
+      <label class="form-label">Gender</label>
+      <select class="form-select" name="gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
+
+    <!-- Course Dropdown -->
+    <div class="mb-3">
+      <label class="form-label">Course</label>
+      <select class="form-select" name="course_id" required>
+        {% for course in courses %}
+        <option value="{{ course.id }}">{{ course.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Year Dropdown -->
+    <div class="mb-3">
+      <label class="form-label">Year</label>
+      <select class="form-select" name="batch_id" required>
+        {% for batch in batches %}
+        <option value="{{ batch.id }}">{{ batch.year }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Add Student</button>
+  </form>
+  {% endblock %}
+</div>

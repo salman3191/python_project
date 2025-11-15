@@ -1,0 +1,128 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+
+<!-- University Intro Carousel -->
+<div
+  id="universityCarousel"
+  class="carousel slide mb-5"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-inner">
+    <!-- Slide 1: Foundation -->
+    <div class="carousel-item active">
+      <img
+        src="{{ url_for('static', filename='images/foundation.jpg') }}"
+        class="d-block w-100"
+        alt="University Foundation"
+      />
+      <div
+        class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded"
+      >
+        <h5>Our Foundation</h5>
+        <p>
+          Established in 1990, our university has grown into a hub of innovation
+          and excellence, nurturing thousands of graduates across diverse
+          fields.
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 2: Achievements -->
+    <div class="carousel-item">
+      <img
+        src="{{ url_for('static', filename='images/achievements.jpg') }}"
+        class="d-block w-100"
+        alt="Achievements"
+      />
+      <div
+        class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded"
+      >
+        <h5>Achievements</h5>
+        <p>
+          Ranked among the top institutions in research and technology, our
+          students and faculty have won national awards and global recognition.
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 3: Vision -->
+    <div class="carousel-item">
+      <img
+        src="{{ url_for('static', filename='images/campus.jpg') }}"
+        class="d-block w-100"
+        alt="Campus"
+      />
+      <div
+        class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded"
+      >
+        <h5>Our Vision</h5>
+        <p>
+          We aim to empower future leaders through quality education,
+          cutting-edge research, and a vibrant campus life.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#universityCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#universityCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<div class="container mt-4">
+  <h2 class="mb-4">Department Gallery</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img
+          src="{{ url_for('static', filename='images/classroom.jpg') }}"
+          class="card-img-top"
+          alt="Classroom"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Classroom</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img
+          src="{{ url_for('static', filename='images/lab.jpg') }}"
+          class="card-img-top"
+          alt="Lab"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Computer Lab</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img
+          src="{{ url_for('static', filename='images/library.jpg') }}"
+          class="card-img-top"
+          alt="Library"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Library</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block title %}{{ department.name }}{% endblock %}
+{% block content %}
+<h2 class="mb-4">{{ department.name }} - Students</h2>
+
+<table class="table table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>Enrollment No.</th>
+      <th>Registration No.</th>
+      <th>Name</th>
+      <th>Parentage</th>
+      <th>DOB</th>
+      <th>Category</th>
+      <th>Gender</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <td>{{ student.enrollment_no }}</td>
+      <td>{{ student.registration_no }}</td>
+      <td>{{ student.name }}</td>
+      <td>{{ student.parentage }}</td>
+      <td>{{ student.dob }}</td>
+      <td>{{ student.category }}</td>
+      <td>{{ student.gender }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

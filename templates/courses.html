@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Courses{% endblock %} {% block
+content %}
+<h2 class="mb-4 text-center">Courses</h2>
+<div class="row">
+  {% for course in courses %}
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ course.name }}</h5>
+        <a
+          href="{{ url_for('course_batches', id=course.id) }}"
+          class="btn btn-primary mt-3"
+        >
+          View Years
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
