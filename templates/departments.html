@@ -10,13 +10,42 @@ content %}
         class="card-img-top"
         alt="{{ dept.name }}"
       />
-      <div class="card-body">
+      <div class="card-body text-center">
         <h5 class="card-title">{{ dept.name }}</h5>
-        <a
-          href="{{ url_for('department_courses', id=dept.id) }}"
-          class="btn btn-primary"
-          >View Details</a
-        >
+
+        <div class="d-flex justify-content-center gap-2">
+          <a
+            href="{{ url_for('department_courses', id=dept.id) }}"
+            class="btn btn-primary w-50"
+            >View Details</a
+          >
+
+          {% if dept.name == 'B.Tech CSE' %}
+          <a href="{{ url_for('cse_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% elif dept.name == 'Department of Management Studies' %}
+          <a href="{{ url_for('management_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% elif dept.name == 'Department of English' %}
+          <a href="{{ url_for('english_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% elif dept.name == 'Department of Computer Science' %}
+          <a href="{{ url_for('cs_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% elif dept.name == 'Department of Teacher Education' %}
+          <a href="{{ url_for('teacher_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% elif dept.name == 'Department of Botany' %}
+          <a href="{{ url_for('botany_info') }}" class="btn btn-info"
+            >Department Info</a
+          >
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>

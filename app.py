@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 import matplotlib.pyplot as plt
+
 import os
 from config import get_db_connection
 from flask import abort
 from flask import render_template, request, redirect, url_for, flash
+import io
+import base64
+
 
 
 app = Flask(__name__)
@@ -50,6 +54,30 @@ def department_courses(id):
     courses = cursor.fetchall()
     conn.close()
     return render_template('courses.html', courses=courses)
+@app.route('/department/cse/info')
+def cse_info():
+    return render_template('info/cse_info.html')
+
+@app.route('/department/management/info')
+def management_info():
+    return render_template('info/management_info.html')
+
+@app.route('/department/english/info')
+def english_info():
+    return render_template('info/english_info.html')
+
+@app.route('/department/cs/info')
+def cs_info():
+    return render_template('info/cs_info.html')
+
+@app.route('/department/teacher/info')
+def teacher_info():
+    return render_template('info/teacher_info.html')
+
+@app.route('/department/botany/info')
+def botany_info():
+    return render_template('info/botany_info.html')
+
 
 # show batches for a course
 @app.route('/courses/<int:id>/batches')
@@ -97,6 +125,38 @@ def batch_students(id):
         no_data=(len(students) == 0)
     )
 
+@app.route('/batches/<int:batch_id>/gender-ratio')
+def gender_ratio_chart(batch_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT gender FROM student WHERE batch_id = %s", (batch_id,))
+    students = cursor.fetchall()
+    conn.close()
+
+    # Count genders
+    male_count = sum(1 for s in students if s['gender'].lower() == 'male')
+    female_count = sum(1 for s in students if s['gender'].lower() == 'female')
+
+    # Create pie chart
+    labels = ['Male', 'Female']
+    sizes = [male_count, female_count]
+    colors = ['#3498db', '#e74c3c']
+    explode = (0.05, 0.05)
+
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, colors=colors, explode=explode, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')
+    plt.title('Gender Ratio in Batch')
+
+    # Convert plot to base64
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    chart_data = base64.b64encode(buf.getvalue()).decode()
+    buf.close()
+
+    return render_template('gender_chart.html', chart_data=chart_data, batch_id=batch_id)
+
 @app.route('/students/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
     conn = get_db_connection()
@@ -114,7 +174,7 @@ def edit_student(id):
         conn.commit()
         conn.close()
         flash("Student updated successfully!", "success")
-        return redirect(url_for('students'))
+        return redirect(url_for('batch_students', id=student['batch_id']))
 
     conn.close()
     return render_template('edit_student.html', student=student)

@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block title %}CSE Department Info{% endblock %} {%
+block content %}
+
+<h2 class="mb-4 text-center">Department of Computer Science & Engineering</h2>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Course</th>
+      <th>Started In</th>
+      <th>Intake</th>
+      <th>Specialization</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="table-success">
+      <td><strong>B.Tech (CSE)</strong></td>
+      <td>2009</td>
+      <td><span class="badge bg-success">65 (50+15)</span></td>
+      <td>—</td>
+    </tr>
+    <tr class="table-info">
+      <td><strong>M.Tech (CSE)</strong></td>
+      <td>2021</td>
+      <td><span class="badge bg-info text-dark">18</span></td>
+      <td>AI & Data Science, InfoSec, IoT, Advanced Computing</td>
+    </tr>
+    <tr class="table-warning">
+      <td><strong>Ph.D (CSE)</strong></td>
+      <td>2014</td>
+      <td><span class="badge bg-warning text-dark">43 Scholars</span></td>
+      <td>AI, ML, Quantum Computing, SDN, Image Processing</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="mt-4">
+  <h5><span class="badge bg-primary">Research Areas</span></h5>
+  <p>
+    SDN, Next Gen Networks, Network Security, Data Sciences, AI, ML, Quantum
+    Computing
+  </p>
+
+  <h5><span class="badge bg-success">Publications</span></h5>
+  <p><strong>30 papers</strong> published by faculty</p>
+
+  <h5><span class="badge bg-secondary">Contact</span></h5>
+  <p>Email: <a href="mailto:csen@uok.edu.in">csen@uok.edu.in</a></p>
+</div>
+
+{% endblock %}

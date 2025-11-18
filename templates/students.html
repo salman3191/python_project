@@ -49,4 +49,11 @@ content %}
     {% endfor %}
   </tbody>
 </table>
+<form
+  action="{{ url_for('gender_ratio_chart', batch_id=batch['id']) }}"
+  method="get"
+  class="ms-2 mb-3"
+>
+  <button type="submit" class="btn btn-info">Show Gender Ratio</button>
+</form>
 {% endif %} {% endblock %}

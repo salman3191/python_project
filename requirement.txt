@@ -1,0 +1,4 @@
+install 
+flask and sql connector 
+
+
