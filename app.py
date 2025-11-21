@@ -7,6 +7,10 @@ from flask import abort
 from flask import render_template, request, redirect, url_for, flash
 import io
 import base64
+import csv
+
+
+
 
 
 
@@ -17,6 +21,7 @@ app.secret_key = "your-very-secret-key"   # 👈 Add this line
 @app.route('/')
 def home():
     return render_template('home.html')
+
 
 # Show all departments as cards
 @app.route('/departments')
@@ -293,6 +298,19 @@ def reports():
     plt.close()
 
     return render_template('reports.html', graph_file="dept_report.png")
+def read_csv(path):
+    with open(path, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+@app.route('/scholarships')
+def scholarships():
+    rows = read_csv('scholarships.csv')
+    # Derive unique schemes for a filter dropdown (optional)
+    schemes = sorted(set(r['ScholarshipScheme'] for r in rows))
+    rowgroups = ['Total', 'PWD', 'Muslim Minority', 'Other Minority']
+    return render_template('scholarships.html', rows=rows, schemes=schemes, rowgroups=rowgroups)
+
 
 if __name__ == "__main__":
     app.run(debug= True)
