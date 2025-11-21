@@ -101,7 +101,7 @@ def batch_students(id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get batch info (year + course name)
+    # Get batch info
     cursor.execute("""
     SELECT b.id, b.year, c.name AS course_name
     FROM batch b
@@ -111,18 +111,31 @@ def batch_students(id):
     batch_info = cursor.fetchone()
 
     if batch_info is None:
-      abort(404)
+        abort(404)
 
     # Get students
     cursor.execute("SELECT * FROM student WHERE batch_id = %s", (id,))
     students = cursor.fetchall()
     conn.close()
 
+    # ✅ Search logic
+    search_query = request.args.get('search', '').lower()
+    if search_query:
+        students = [s for s in students if
+                    search_query in s['name'].lower() or
+                    search_query in s['enrollment_no'].lower() or
+                    search_query in s['registration_no'].lower()]
+
+    # ✅ Pick first match for Edit/Delete beside search box
+    selected_student = students[0] if students else None
+
     return render_template(
         'students.html',
         students=students,
         batch=batch_info,
-        no_data=(len(students) == 0)
+        no_data=(len(students) == 0),
+        selected_student=selected_student,
+        search_query=search_query
     )
 
 @app.route('/batches/<int:batch_id>/gender-ratio')
@@ -167,10 +180,20 @@ def edit_student(id):
     if request.method == 'POST':
         name = request.form['name']
         gender = request.form['gender']
-        # update other fields...
+        enrollment_no = request.form['enrollment_no']
+        registration_no = request.form['registration_no']
+        parentage = request.form['parentage']
+        dob = request.form['dob']
+        category = request.form['category']
+
         cursor.execute("""
-            UPDATE student SET name=%s, gender=%s WHERE id=%s
-        """, (name, gender, id))
+            UPDATE student 
+            SET name=%s, gender=%s, enrollment_no=%s, registration_no=%s,
+                parentage=%s, dob=%s, category=%s
+            WHERE id=%s
+        """, (name, gender, enrollment_no, registration_no,
+              parentage, dob, category, id))
+
         conn.commit()
         conn.close()
         flash("Student updated successfully!", "success")

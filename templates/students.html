@@ -2,7 +2,38 @@
 content %}
 
 <h2 class="mb-4 ms-2">{{ batch.course_name }} - {{ batch.year }} Students</h2>
+<!-- 🔍 Search box with Edit/Delete buttons -->
+<form
+  method="get"
+  action="{{ url_for('batch_students', id=batch.id) }}"
+  class="d-flex justify-content-between align-items-center mb-3 ms-2 me-2"
+>
+  <!-- Search box -->
+  <input
+    type="text"
+    name="search"
+    class="form-control w-50"
+    placeholder="Search by name, enrollment, or registration..."
+    value="{{ search_query }}"
+  />
 
+  <!-- Edit/Delete buttons (only show if a student was found) -->
+  {% if selected_student %}
+  <div class="ms-3 d-flex gap-2">
+    <a
+      href="{{ url_for('edit_student', id=selected_student.id) }}"
+      class="btn btn-sm btn-primary"
+      >Edit</a
+    >
+    <a
+      href="{{ url_for('delete_student', id=selected_student.id, batch_id=batch.id) }}"
+      class="btn btn-sm btn-danger"
+      onclick="return confirm('Are you sure you want to delete this student?');"
+      >Delete</a
+    >
+  </div>
+  {% endif %}
+</form>
 {% if no_data %}
 <div class="alert alert-warning ms-2" role="alert">
   No students found for this batch.
@@ -31,7 +62,7 @@ content %}
       <td>{{ student.category }}</td>
       <td>{{ student.gender }}</td>
 
-      <td>
+      <!-- <td>
         <a
           href="{{ url_for('edit_student', id=student.id) }}"
           class="btn btn-sm btn-primary"
@@ -44,7 +75,7 @@ content %}
         >
           Delete
         </a>
-      </td>
+      </td> -->
     </tr>
     {% endfor %}
   </tbody>
