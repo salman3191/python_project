@@ -9,6 +9,9 @@ import io
 import base64
 import csv
 
+import webbrowser
+from threading import Timer
+
 
 
 
@@ -245,27 +248,30 @@ def add_student():
         dob = request.form['dob']
         category = request.form['category']
         gender = request.form['gender']
-        course_id = request.form['course_id']
-        batch_id = request.form['batch_id']
+        course_id = int(request.form['course_id'])
+        batch_id = int(request.form['batch_id'])
 
         try:
+            # ✅ Insert student with both course_id and department_id
             cursor.execute("""
                 INSERT INTO student (
                     enrollment_no, registration_no, name, parentage, dob,
-                    category, gender, department_id, batch_id
+                    category, gender, department_id, batch_id, course_id
                 )
                 VALUES (
                     %s, %s, %s, %s, %s,
                     %s, %s,
                     (SELECT department_id FROM course WHERE id=%s),
-                    %s
+                    %s, %s
                 )
-            """, (enrollment_no, registration_no, name, parentage, dob,
-                  category, gender, course_id, batch_id))
+            """, (
+                enrollment_no, registration_no, name, parentage, dob,
+                category, gender, course_id, batch_id, course_id
+            ))
 
             conn.commit()
             flash("Student added successfully!", "success")
-            return redirect(url_for('add_student'))  # ✅ redirect back to form or another route
+            return redirect(url_for('add_student'))  # redirect back to form or another route
 
         except Exception as e:
             conn.rollback()
@@ -343,5 +349,11 @@ def scholarships():
     return render_template('scholarships.html', rows=rows, schemes=schemes, rowgroups=rowgroups)
 
 
+
+
+def open_browser():
+    webbrowser.open_new("http://127.0.0.1:5000/")
+
 if __name__ == "__main__":
-    app.run(debug= True)
+    Timer(1, open_browser).start()
+    app.run(debug=False)
