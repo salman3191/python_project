@@ -222,6 +222,11 @@ def delete_student(id, batch_id):
 
 @app.route('/students/add', methods=['GET', 'POST'])
 def add_student():
+    # ✅ Check if teacher is logged in
+    if 'teacher_id' not in session:
+        flash("Please log in as a teacher to add students.", "warning")
+        return redirect(url_for('teacher_login'))
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -243,28 +248,54 @@ def add_student():
         course_id = request.form['course_id']
         batch_id = request.form['batch_id']
 
-        cursor.execute("""
-            INSERT INTO student (
-                enrollment_no, registration_no, name, parentage, dob,
-                category, gender, department_id, batch_id
-            )
-            VALUES (
-                %s, %s, %s, %s, %s,
-                %s, %s,
-                (SELECT department_id FROM course WHERE id=%s),
-                %s
-            )
-        """, (enrollment_no, registration_no, name, parentage, dob,
-              category, gender, course_id, batch_id))
+        try:
+            cursor.execute("""
+                INSERT INTO student (
+                    enrollment_no, registration_no, name, parentage, dob,
+                    category, gender, department_id, batch_id
+                )
+                VALUES (
+                    %s, %s, %s, %s, %s,
+                    %s, %s,
+                    (SELECT department_id FROM course WHERE id=%s),
+                    %s
+                )
+            """, (enrollment_no, registration_no, name, parentage, dob,
+                  category, gender, course_id, batch_id))
 
-        conn.commit()
-        conn.close()
+            conn.commit()
+            flash("Student added successfully!", "success")
+            return redirect(url_for('add_student'))  # ✅ redirect back to form or another route
 
-        flash("Student added successfully!", "success")
-        return redirect(url_for('flasmessage.html'))
+        except Exception as e:
+            conn.rollback()
+            flash(f"Error adding student: {e}", "danger")
 
     conn.close()
     return render_template('add_student.html', courses=courses, batches=batches)
+
+from flask import request, session, redirect, url_for, render_template, flash
+from werkzeug.security import check_password_hash
+
+@app.route('/teacher/login', methods=['GET', 'POST'])
+def teacher_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM teacher WHERE username=%s", (username,))
+        teacher = cursor.fetchone()
+        conn.close()
+
+        if teacher and password == teacher['password']:  # or use check_password_hash()
+            session['teacher_id'] = teacher['id']
+            return redirect(url_for('add_student'))
+        else:
+            flash('Invalid login details', 'danger')
+
+    return render_template('teacher_login.html')
 
 # Reports page with bar chart
 @app.route('/reports')

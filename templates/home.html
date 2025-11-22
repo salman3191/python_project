@@ -6,13 +6,13 @@
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img
-        src="{{ url_for('static', filename='images/campus.jpg') }}"
+        src="{{ url_for('static', filename='images/campus.jpeg') }}"
         class="d-block w-100"
         alt="Campus"
       />
       <div class="carousel-caption d-none d-md-block">
         <h2>Welcome to University of Kashmir - North Campus</h2>
-        <p>NAAC Accredited Grade 'A'</p>
+        <p><strong>NAAC Accredited Grade 'A+'</strong></p>
       </div>
     </div>
     <div class="carousel-item">
@@ -55,7 +55,7 @@
 </div>
 
 <!-- About Section -->
-<div class="container mb-5">
+<div class="container mb-5" id="about">
   <h3>About the University</h3>
   <p>
     The University of Kashmir - North Campus is dedicated to excellence in
@@ -64,9 +64,9 @@
     life.
   </p>
   <div class="row mt-3">
-    <div class="col-md-4">
+    <div class="col-md-4" id="director">
       <img
-        src="{{ url_for('static', filename='images/director.jpg') }}"
+        src="{{ url_for('static', filename='images/director.jpeg') }}"
         class="img-fluid rounded"
         alt="Director"
       />
@@ -77,14 +77,16 @@
           "Our vision is to empower students with knowledge, skills, and values
           for a brighter future."
         </p>
-        <footer class="blockquote-footer">Director, North Campus</footer>
+        <footer class="blockquote-footer">
+          Dr. Sheikh Ghulam Mohammad Director, North Campus
+        </footer>
       </blockquote>
     </div>
   </div>
 </div>
 
 <!-- Facilities Section -->
-<div class="container mb-5">
+<div class="container mb-5" id="facilities">
   <h3>Campus Facilities</h3>
   <div class="row">
     <div class="col-md-3">
@@ -93,7 +95,8 @@
         class="img-fluid rounded mb-2"
         alt="Lab"
       />
-      <p class="text-center">Labs</p>
+
+      <p class="text-center"><strong>Labs</strong></p>
     </div>
     <div class="col-md-3">
       <img
@@ -101,7 +104,7 @@
         class="img-fluid rounded mb-2"
         alt="Bus"
       />
-      <p class="text-center">Transport</p>
+      <p class="text-center"><strong>Transport</strong></p>
     </div>
     <div class="col-md-3">
       <img
@@ -109,7 +112,8 @@
         class="img-fluid rounded mb-2"
         alt="Park"
       />
-      <p class="text-center">Parks</p>
+
+      <p class="text-center"><strong>Parks</strong></p>
     </div>
     <div class="col-md-3">
       <img
@@ -117,13 +121,14 @@
         class="img-fluid rounded mb-2"
         alt="Library"
       />
-      <p class="text-center">Library</p>
+
+      <p class="text-center"><strong>Library</strong></p>
     </div>
   </div>
 </div>
 
 <!-- Achievements Section -->
-<div class="container mb-5">
+<div class="container mb-5" id="achievements">
   <h3>Achievements</h3>
   <ul>
     <li>13 Research Papers published by faculty</li>
@@ -133,7 +138,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="footer bg-dark text-white text-center">
+<footer class="footer bg-white text-black text-center" id="footer1">
   <p>University of Kashmir - North Campus, Delina, Baramulla</p>
   <p>Email: info@uok.edu.in | Phone: +91-XXXX-XXXXXX</p>
 </footer>

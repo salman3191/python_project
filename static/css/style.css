@@ -1,3 +1,121 @@
-footer.footer p {
-  width: 100% !important;
+.footer {
+  bottom: 0;
+  left: 0;
+  width: 100%; /* full width */
+  background-color: white;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  height: auto;
+}
+
+.container-fluid .footer p {
+  margin: 0; /* remove default spacing */
+  font-size: 14px; /* adjust size */
+}
+
+/* Limit carousel image height */
+.carousel-item img {
+  width: 100%; /* full width */
+  height: 300px; /* fixed height */
+  object-fit: cover; /* crop image nicely without distortion */
+}
+/* Add space below navbar */
+.carousel {
+  margin-top: 80px; /* adjust based on navbar height */
+}
+.carousel-caption {
+  bottom: 5px; /* move caption down from bottom edge */
+}
+.carousel-caption h2,
+.carousel-caption p {
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+#director {
+  height: 120px;
+  width: 120px;
+}
+
+#about {
+  margin-left: 10px;
+}
+
+#facilities,
+#achievements {
+  margin-left: 10px;
+}
+
+#department {
+  margin-top: 80px;
+}
+
+#department .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect: lift + scale + shadow */
+#department .card:hover {
+  transform: translateY(-5px) scale(1.02); /* lift + slight zoom */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* deeper shadow */
+  z-index: 2;
+}
+
+#department .card:hover {
+  border: 1px solid #0d6efd;
+  box-shadow: 0 12px 24px rgba(13, 110, 253, 0.3);
+}
+
+/* Compact course cards */
+#courses .card {
+  height: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#courses .card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+
+#courses .card-body {
+  padding: 10px;
+}
+
+#courses .card-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+#courses .btn {
+  font-size: 14px;
+  padding: 6px 10px;
+}
+
+/* Hover effect */
+#courses .card:hover {
+  transform: translateY(-5px) scale(1.02); /* pop out */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+#facilities img {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Hover effect */
+#facilities img:hover {
+  transform: scale(2); /* Change 1.1 to 1.2 or 1.3 for larger zoom */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Optional shadow */
+  z-index: 2;
+}
+
+#hk {
+  margin-top: 90px; /* or any value you prefer */
+}
+#cs {
+  margin-top: 90px;
+}
+
+#botanyinfo {
+  margin-top: 90px;
 }
