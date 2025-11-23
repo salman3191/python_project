@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Summary</title>
+    <!-- Use your existing CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .summary-container {
+            width: 95%; margin: 30px auto; background: #fff; padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-family: sans-serif;
+        }
+        .header-title { text-align: center; margin-bottom: 20px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; font-size: 14px; }
+
+        /* Colors */
+        .bg-dark { background-color: #333; color: white; }
+        .bg-gray { background-color: #eee; font-weight: bold; }
+        .bg-light { background-color: #f9f9f9; font-size: 12px; color: #555; }
+        .bg-green { background-color: #d4edda; color: #155724; } /* Total Column */
+        .bg-green-light { background-color: #e8f5e9; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="summary-container">
+    <div class="header-title">
+        <h2>Enrollment Summary</h2>
+        <p><strong>{{ batch.dept_name }}</strong><br>
+           Course: {{ batch.course_name }} | Batch: {{ batch.year }}</p>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" class="bg-dark">Mode</th>
+                    <!-- Category Headers -->
+                    {% for cat in categories %}
+                        <th colspan="3" class="bg-gray">{{ cat }}</th>
+                    {% endfor %}
+                    <!-- Grand Total Header -->
+                    <th colspan="3" class="bg-green">Total</th>
+                </tr>
+                <tr>
+                    <!-- Gender Headers -->
+                    {% for cat in categories %}
+                        <th class="bg-light">M</th>
+                        <th class="bg-light">F</th>
+                        <th class="bg-light">T</th>
+                    {% endfor %}
+                    <!-- Total Gender Headers -->
+                    <th class="bg-light bg-green">M</th>
+                    <th class="bg-light bg-green">F</th>
+                    <th class="bg-light bg-green">T</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mode in modes %}
+                <tr>
+                    <td style="font-weight:bold; text-align:left; padding-left:15px;">{{ mode }}</td>
+
+                    <!-- Loop Categories -->
+                    {% for cat in categories %}
+                        <td>{{ data[mode][cat]['Male'] }}</td>
+                        <td>{{ data[mode][cat]['Female'] }}</td>
+                        <td>{{ data[mode][cat]['Transgender'] }}</td>
+                    {% endfor %}
+
+                    <!-- Loop Totals -->
+                    <td class="bg-green-light">{{ data[mode]['Total']['Male'] }}</td>
+                    <td class="bg-green-light">{{ data[mode]['Total']['Female'] }}</td>
+                    <td class="bg-green-light">{{ data[mode]['Total']['Transgender'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+        <button onclick="window.print()" style="padding:10px 20px; cursor:pointer; background:#007bff; color:white; border:none; border-radius:4px;">Print Report</button>
+        <a href="javascript:history.back()" style="padding:10px 20px; text-decoration:none; color:#333;">Go Back</a>
+    </div>
+</div>
+
+</body>
+</html>
