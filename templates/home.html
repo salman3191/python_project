@@ -56,29 +56,33 @@
 
 <!-- About Section -->
 <div class="container mb-5" id="about">
-  <h3>About the University</h3>
+  <h3 class="pb-2 border-bottom">About the University</h3>
   <p>
     The University of Kashmir - North Campus is dedicated to excellence in
     education, research, and innovation. Established to nurture talent and
     provide world-class facilities, the campus is a hub of vibrant academic
     life.
   </p>
-  <div class="row mt-3">
+  <div class="row mt-3 align-items-center">
     <div class="col-md-4" id="director">
       <img
         src="{{ url_for('static', filename='images/director.jpeg') }}"
-        class="img-fluid rounded"
+        class="img-fluid rounded shadow border"
         alt="Director"
       />
     </div>
     <div class="col-md-8">
-      <blockquote class="blockquote">
+      <blockquote
+        class="blockquote bg-light p-3 border-start border-primary rounded"
+      >
         <p>
           "Our vision is to empower students with knowledge, skills, and values
           for a brighter future."
         </p>
+        <br />
         <footer class="blockquote-footer">
-          Dr. Sheikh Ghulam Mohammad Director, North Campus
+          Dr. Sheikh Ghulam Mohammad<br />
+          <small class="text-muted">Director, North Campus</small>
         </footer>
       </blockquote>
     </div>
@@ -129,12 +133,47 @@
 
 <!-- Achievements Section -->
 <div class="container mb-5" id="achievements">
-  <h3>Achievements</h3>
-  <ul>
-    <li>13 Research Papers published by faculty</li>
-    <li>Students qualified NET/JRF/GATE exams</li>
-    <li>National Seminars and Workshops organized</li>
-  </ul>
+  <h3 class="text-center mb-4">🎓 Achievements</h3>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-journal-text display-5 text-primary mb-3"></i>
+          <h5 class="card-title">Research Excellence</h5>
+          <p class="card-text">
+            13 Research Papers published by faculty across national and
+            international journals.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-award display-5 text-success mb-3"></i>
+          <h5 class="card-title">Student Success</h5>
+          <p class="card-text">
+            Students qualified prestigious exams like NET, JRF, and GATE with
+            flying colors.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-people display-5 text-warning mb-3"></i>
+          <h5 class="card-title">Academic Engagement</h5>
+          <p class="card-text">
+            National seminars and workshops organized to foster research and
+            collaboration.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->

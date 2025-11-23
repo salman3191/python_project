@@ -8,14 +8,8 @@ from flask import render_template, request, redirect, url_for, flash
 import io
 import base64
 import csv
-
 import webbrowser
 from threading import Timer
-
-
-
-
-
 
 app = Flask(__name__)
 app.secret_key = "your-very-secret-key"   # 👈 Add this line
@@ -126,7 +120,7 @@ def batch_students(id):
     students = cursor.fetchall()
     conn.close()
 
-    # ✅ Search logic
+    # Search logic
     search_query = request.args.get('search', '').lower()
     if search_query:
         students = [s for s in students if
@@ -134,7 +128,7 @@ def batch_students(id):
                     search_query in s['enrollment_no'].lower() or
                     search_query in s['registration_no'].lower()]
 
-    # ✅ Pick first match for Edit/Delete beside search box
+    # Pick first match for Edit/Delete beside search box
     selected_student = students[0] if students else None
 
     return render_template(
@@ -225,7 +219,7 @@ def delete_student(id, batch_id):
 
 @app.route('/students/add', methods=['GET', 'POST'])
 def add_student():
-    # ✅ Check if teacher is logged in
+    #  Check if teacher is logged in
     if 'teacher_id' not in session:
         flash("Please log in as a teacher to add students.", "warning")
         return redirect(url_for('teacher_login'))
@@ -356,4 +350,4 @@ def open_browser():
 
 if __name__ == "__main__":
     Timer(1, open_browser).start()
-    app.run(debug=False)
+    app.run(debug=True,use_reloader=True)
