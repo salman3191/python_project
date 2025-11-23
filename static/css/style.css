@@ -1,143 +1,321 @@
-.footer {
-  bottom: 0;
-  left: 0;
-  width: 100%; /* full width */
-  background-color: white;
+:root {
+  --primary: #0b6efd;
+  --accent: #fcbf49;
+  --glass: rgba(255, 255, 255, 0.06);
+  --muted: #98a0a6;
+  --bg: #f7f9fb;
+  --card-radius: 14px;
+  --max-width: 1200px;
+  --glass-blur: 6px;
+  --elev: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#page-content {
+  height: 100%;
+}
+body {
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: #0f1724;
+  line-height: 1.45;
+}
+
+/* NAV */
+.custom-navbar {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 10, 15, 0.18),
+    rgba(6, 10, 15, 0.06)
+  );
+  position: absolute;
+  width: 100%;
+  z-index: 20;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(var(--glass-blur));
+}
+.brand-text {
   color: #fff;
-  text-align: center;
-  padding: 10px 0;
-  height: auto;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
-
-.container-fluid .footer p {
-  margin: 0; /* remove default spacing */
-  font-size: 14px; /* adjust size */
-}
-
-/* Limit carousel image height */
-.carousel-item img {
-  width: 100%; /* full width */
-  height: 300px; /* fixed height */
-  object-fit: cover; /* crop image nicely without distortion */
-}
-/* Add space below navbar */
-.carousel {
-  margin-top: 80px; /* adjust based on navbar height */
-}
-.carousel-caption {
-  bottom: 5px; /* move caption down from bottom edge */
-}
-.carousel-caption h2,
-.carousel-caption p {
+.brand-visible {
+  font-weight: 600;
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
-#director {
-  height: 120px;
-  width: 120px;
+.nav-link-custom {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
 }
-
-#about {
-  margin-left: 10px;
+.nav-link-custom:hover {
+  color: var(--accent);
 }
-
-#facilities,
-#achievements {
-  margin-left: 10px;
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
 
-#department {
-  margin-top: 80px;
+/* HERO - using an <img> so the image is never cropped */
+.hero-section {
+  position: relative;
+  height: 86vh;
+  min-height: 480px;
+  display: block;
+  overflow: hidden;
+}
+.hero-media {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0b1220;
+  z-index: 1;
 }
 
-#department .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Important: the img uses object-fit:contain so it scales to fit without cropping.
+   We set max-width & max-height so it fills nicely on large screens but doesn't get blown up. */
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* fit fully without cropping */
+  object-position: center center;
+  max-width: 1400px;
+  max-height: 86vh;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.98;
+  transform: none;
+  display: block;
 }
 
-/* Hover effect: lift + scale + shadow */
-#department .card:hover {
-  transform: translateY(-5px) scale(1.02); /* lift + slight zoom */
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* deeper shadow */
+/* overlay for contrast (slightly reduced so image details show through) */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 6, 23, 0.28),
+    rgba(2, 6, 23, 0.48) 60%
+  );
+  mix-blend-mode: multiply;
   z-index: 2;
+  pointer-events: none;
 }
 
-#department .card:hover {
-  border: 1px solid #0d6efd;
-  box-shadow: 0 12px 24px rgba(13, 110, 253, 0.3);
+/* content sits above overlay */
+.hero-inner {
+  position: relative;
+  z-index: 3;
+  padding-top: 6.5rem;
+  padding-bottom: 3rem;
+  max-width: var(--max-width);
 }
 
-/* Compact course cards */
-#courses .card {
-  height: 300px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* HERO TEXT */
+.university-title {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  opacity: 0.95;
+  text-transform: uppercase;
+}
+.campus-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+.system-title {
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-top: 1.25rem;
+  letter-spacing: 1.5px;
 }
 
-#courses .card-img-top {
-  height: 150px;
-  object-fit: cover;
+/* CTA styles */
+.hero-ctas .btn-primary {
+  background: linear-gradient(90deg, var(--primary), #0063e6);
+  border: 0;
+  box-shadow: var(--elev);
+}
+.hero-ctas .btn-outline-light {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-#courses .card-body {
-  padding: 10px;
+/* decorative wave */
+.hero-wave svg {
+  display: block;
+  width: 100%;
+  height: 70px;
+}
+.hero-wave path {
+  fill: var(--bg);
 }
 
-#courses .card-title {
-  font-size: 16px;
-  margin-bottom: 8px;
+/* STAT CARD */
+.stat-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.32);
+}
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+.stat h3 {
+  margin: 0;
+  font-size: 1.1rem;
 }
 
-#courses .btn {
-  font-size: 14px;
-  padding: 6px 10px;
+/* FEATURES */
+.features {
+  max-width: var(--max-width);
 }
-
-/* Hover effect */
-#courses .card:hover {
-  transform: translateY(-5px) scale(1.02); /* pop out */
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-#facilities img {
+.feature-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--elev);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
+  text-align: center;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+}
+.feature-icon {
+  font-size: 1.7rem;
+  color: var(--primary);
 }
 
-/* Hover effect */
-#facilities img:hover {
-  transform: scale(2); /* Change 1.1 to 1.2 or 1.3 for larger zoom */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Optional shadow */
-  z-index: 2;
+/* DEPARTMENTS GRID */
+.dept-tile {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.dept-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--elev);
+  transition: transform 0.28s ease, box-shadow 0.28s ease,
+    border-color 0.28s ease;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(13, 18, 23, 0.03);
+}
+.dept-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.06);
+  border-color: rgba(11, 110, 253, 0.08);
+}
+.dept-icon {
+  font-size: 1.7rem;
+  color: var(--primary);
 }
 
-#hk {
-  margin-top: 90px; /* or any value you prefer */
-}
-#cs {
-  margin-top: 90px;
-}
-
-#botanyinfo {
-  margin-top: 90px;
-}
-#flash {
-  margin-top: 100px;
+/* FOOTER */
+.site-footer {
+  background: transparent;
+  color: var(--muted);
 }
 
-#courseheading {
-  margin-top: 90px;
+/* REVEAL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(0.996);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.25, 1),
+    transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-#courses {
-  margin-top: 40px;
+/* micro interactions, focus visible */
+.btn:focus,
+a:focus {
+  outline: 3px solid rgba(11, 110, 253, 0.12);
+  outline-offset: 3px;
 }
 
-#batchyears {
-  margin-top: 10px;
-}
-#headingdetails {
-  margin-top: 90px;
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .dept-card,
+  .feature-card,
+  .hero-media img {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
-#availableyears {
-  margin-top: 90px;
+/* responsive tweaks */
+@media (max-width: 767px) {
+  .hero-inner {
+    padding-top: 5.5rem;
+  }
+  .system-title {
+    font-size: 1.5rem;
+  }
+  .stat-card {
+    display: none;
+  }
+  .hero-section {
+    min-height: 420px;
+  }
+  .hero-media img {
+    object-fit: cover;
+  } /* on very small screens, cover gives a fuller hero — optional */
+}
+@media (min-width: 992px) {
+  .hero-inner {
+    padding-top: 10rem;
+  }
+  .system-title {
+    font-size: 2.6rem;
+  }
+}
+.btn-summary {
+    display: inline-block;
+    background-color: #007bff; /* Blue background */
+    color: white;              /* White text */
+    padding: 10px 20px;        /* Top/Bottom and Left/Right padding */
+    text-decoration: none;     /* Remove underline */
+    border-radius: 5px;        /* Rounded corners */
+    font-family: sans-serif;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth color change on hover */
+    margin-top: 5px;
+}
+
+/* Darker blue when mouse hovers over it */
+.btn-summary:hover {
+    background-color: #0056b3;
+}
+
+/* Optional: specific style for the Print button */
+.btn-print {
+    background-color: #28a745; /* Green */
+}
+.btn-print:hover {
+    background-color: #218838;
 }
