@@ -1,7 +1,9 @@
 {% extends "base.html" %} {% block title %}Departments{% endblock %} {% block
 content %}
 
-<h2 class="mb-4 ms-2">{{ batch.course_name }} - {{ batch.year }} Students</h2>
+<h2 class="mb-4 ms-2" id="headingdetails">
+  {{ batch.course_name }} - {{ batch.year }} Students
+</h2>
 <!-- 🔍 Search box with Edit/Delete buttons -->
 <form
   method="get"
