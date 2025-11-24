@@ -9,12 +9,18 @@ content %}
       class="list-group-item d-flex justify-content-between align-items-center mb-3"
     >
       <strong>{{ batch.course_name }} {{ batch.year }}</strong>
-      <a
-        href="{{ url_for('batch_students', id=batch.id) }}"
-        class="btn btn-sm btn-primary"
-      >
-        View Students
-      </a>
+      <div class="ms-auto d-flex" style="gap: 4px">
+        <a
+          href="{{ url_for('batch_students', id=batch.id) }}"
+          class="btn btn-sm btn-primary"
+          >View Students</a
+        >
+        <a
+          href="{{ url_for('enrollment_summary', batch_id=batch.id) }}"
+          class="btn btn-sm btn-outline-secondary"
+          >Enrollment Summary</a
+        >
+      </div>
     </li>
     {% endfor %}
   </ul>

@@ -167,3 +167,74 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-11-23 12:47:46
+
+-- --------------------------------------------------------
+-- STEP 1: Create Courses for Empty Departments
+-- --------------------------------------------------------
+
+-- Add 'M.A. English' for Department 3 (English)
+INSERT INTO course (name, department_id) 
+SELECT 'M.A. English', 3 WHERE NOT EXISTS (SELECT * FROM course WHERE name = 'M.A. English');
+
+-- Add 'M.Sc Botany' for Department 6 (Botany)
+INSERT INTO course (name, department_id) 
+SELECT 'M.Sc Botany', 6 WHERE NOT EXISTS (SELECT * FROM course WHERE name = 'M.Sc Botany');
+
+-- --------------------------------------------------------
+-- STEP 2: Create Batches for these new Courses (Year 2024)
+-- --------------------------------------------------------
+
+-- Get IDs for the new courses
+SET @eng_id = (SELECT id FROM course WHERE name = 'M.A. English' LIMIT 1);
+SET @bot_id = (SELECT id FROM course WHERE name = 'M.Sc Botany' LIMIT 1);
+SET @mgmt_id = (SELECT id FROM course WHERE department_id = 2 LIMIT 1); -- Assuming IMBA exists
+
+-- Insert Batches if they don't exist
+INSERT INTO batch (year, course_id)
+SELECT 2024, @eng_id WHERE NOT EXISTS (SELECT * FROM batch WHERE year = 2024 AND course_id = @eng_id);
+
+INSERT INTO batch (year, course_id)
+SELECT 2024, @bot_id WHERE NOT EXISTS (SELECT * FROM batch WHERE year = 2024 AND course_id = @bot_id);
+
+-- --------------------------------------------------------
+-- STEP 3: Insert Dummy Students
+-- --------------------------------------------------------
+
+-- Get Batch IDs
+SET @eng_batch = (SELECT id FROM batch WHERE course_id = @eng_id AND year = 2024 LIMIT 1);
+SET @bot_batch = (SELECT id FROM batch WHERE course_id = @bot_id AND year = 2024 LIMIT 1);
+SET @mgmt_batch = (SELECT id FROM batch WHERE course_id = @mgmt_id AND year = 2024 LIMIT 1);
+
+-- STUDENTS FOR DEPARTMENT OF MANAGEMENT (Regular & Distance mix)
+INSERT INTO student (name, gender, enrollment_no, category, batch_id, mode) VALUES 
+('Rahul Sharma', 'Male', 'MGMT-001', 'General', @mgmt_batch, 'Regular'),
+('Priya Verma', 'Female', 'MGMT-002', 'General', @mgmt_batch, 'Regular'),
+('Amit Patel', 'Male', 'MGMT-003', 'EWS', @mgmt_batch, 'Regular'),
+('Sneha Gupta', 'Female', 'MGMT-004', 'OBC', @mgmt_batch, 'Regular'),
+('Vikram Singh', 'Male', 'MGMT-005', 'SC', @mgmt_batch, 'Distance'),
+('Rohan Das', 'Male', 'MGMT-006', 'General', @mgmt_batch, 'Distance'),
+('Anita Roy', 'Female', 'MGMT-007', 'ST', @mgmt_batch, 'Distance'),
+('Karan Johar', 'Transgender', 'MGMT-008', 'OBC', @mgmt_batch, 'Regular'),
+('Simran Kaur', 'Female', 'MGMT-009', 'General', @mgmt_batch, 'Regular'),
+('Arjun Reddy', 'Male', 'MGMT-010', 'EWS', @mgmt_batch, 'Regular');
+
+-- STUDENTS FOR DEPARTMENT OF ENGLISH (Mostly Regular)
+INSERT INTO student (name, gender, enrollment_no, category, batch_id, mode) VALUES 
+('John Doe', 'Male', 'ENG-001', 'General', @eng_batch, 'Regular'),
+('Emily Blunt', 'Female', 'ENG-002', 'General', @eng_batch, 'Regular'),
+('Robert Frost', 'Male', 'ENG-003', 'SC', @eng_batch, 'Regular'),
+('Sylvia Plath', 'Female', 'ENG-004', 'ST', @eng_batch, 'Regular'),
+('Oscar Wilde', 'Transgender', 'ENG-005', 'OBC', @eng_batch, 'Regular'),
+('Jane Austen', 'Female', 'ENG-006', 'EWS', @eng_batch, 'Regular'),
+('Mark Twain', 'Male', 'ENG-007', 'General', @eng_batch, 'Distance'),
+('Virginia Woolf', 'Female', 'ENG-008', 'General', @eng_batch, 'Distance');
+
+-- STUDENTS FOR DEPARTMENT OF BOTANY (Mostly Distance)
+INSERT INTO student (name, gender, enrollment_no, category, batch_id, mode) VALUES 
+('Green Leaf', 'Male', 'BOT-001', 'General', @bot_batch, 'Regular'),
+('Rose Petal', 'Female', 'BOT-002', 'OBC', @bot_batch, 'Regular'),
+('Basil Herb', 'Transgender', 'BOT-003', 'SC', @bot_batch, 'Distance'),
+('Lily Flower', 'Female', 'BOT-004', 'ST', @bot_batch, 'Distance'),
+('Cactus Jack', 'Male', 'BOT-005', 'General', @bot_batch, 'Distance'),
+('Daisy Duck', 'Female', 'BOT-006', 'General', @bot_batch, 'Distance'),
+('Fern Plant', 'Male', 'BOT-007', 'EWS', @bot_batch, 'Distance');

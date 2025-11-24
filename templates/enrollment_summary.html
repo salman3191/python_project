@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+
+<div class="summary-container">
+  <div class="header-title">
+    <h2>Enrollment Summary</h2>
+    <p>
+      <strong>{{ batch.dept_name }}</strong><br />
+      Course: {{ batch.course_name }} | Batch: {{ batch.year }}
+    </p>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th rowspan="2">Mode</th>
+          {% for cat in categories %}
+          <th colspan="3" class="table-secondary">{{ cat }}</th>
+          {% endfor %}
+          <th colspan="3" class="table-success">Total</th>
+        </tr>
+        <tr>
+          {% for cat in categories %}
+          <th class="table-light">M</th>
+          <th class="table-light">F</th>
+          <th class="table-light">T</th>
+          {% endfor %}
+          <th class="table-success">M</th>
+          <th class="table-success">F</th>
+          <th class="table-success">T</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mode in modes %}
+        <tr>
+          <td class="text-start ps-3 fw-bold">{{ mode }}</td>
+          {% for cat in categories %}
+          <td>{{ data[mode][cat]['Male'] }}</td>
+          <td>{{ data[mode][cat]['Female'] }}</td>
+          <td>{{ data[mode][cat]['Transgender'] }}</td>
+          {% endfor %}
+          <td class="table-success fw-bold">
+            {{ data[mode]['Total']['Male'] }}
+          </td>
+          <td class="table-success fw-bold">
+            {{ data[mode]['Total']['Female'] }}
+          </td>
+          <td class="table-success fw-bold">
+            {{ data[mode]['Total']['Transgender'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-center mt-4">
+    <button onclick="window.print()" class="btn btn-primary me-2">
+      Print Report
+    </button>
+    <a href="javascript:history.back()" class="btn btn-outline-secondary"
+      >Go Back</a
+    >
+  </div>
+</div>
+{% endblock %}

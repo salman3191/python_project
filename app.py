@@ -296,6 +296,69 @@ def teacher_login():
             flash('Invalid login details', 'danger')
 
     return render_template('teacher_login.html')
+# enrollment summary
+@app.route('/batches/<int:batch_id>/enrollment_summary')
+def enrollment_summary(batch_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # 1. Fetch Batch Info
+    cursor.execute("""
+        SELECT b.year, c.name as course_name, d.name as dept_name 
+        FROM batch b
+        JOIN course c ON b.course_id = c.id
+        JOIN department d ON c.department_id = d.id
+        WHERE b.id = %s
+    """, (batch_id,))
+    batch_info = cursor.fetchone()
+
+    if not batch_info:
+        conn.close()
+        return "Batch not found", 404
+
+    # 2. Fetch Aggregated Student Data
+    query = """
+        SELECT mode, category, gender, COUNT(*) as count 
+        FROM student 
+        WHERE batch_id = %s 
+        GROUP BY mode, category, gender
+    """
+    cursor.execute(query, (batch_id,))
+    results = cursor.fetchall()
+    conn.close()
+
+    # 3. Setup Matrix
+    categories = ['General', 'EWS', 'SC', 'ST', 'OBC']
+    genders = ['Male', 'Female', 'Transgender']
+    modes = ['Regular', 'Distance']
+
+    data = {mode: {cat: {gen: 0 for gen in genders} for cat in categories} for mode in modes}
+
+    for mode in modes:
+        data[mode]['Total'] = {gen: 0 for gen in genders}
+
+    # 4. Fill Matrix
+    cat_map = {'OM': 'General'}
+
+    for row in results:
+        raw_mode = row['mode']
+        raw_cat = row['category']
+        raw_gen = row['gender']
+        count = row['count']
+
+        mode_key = raw_mode if raw_mode in modes else 'Regular'
+        cat_key = cat_map.get(raw_cat, raw_cat)
+        gen_key = raw_gen.capitalize() if raw_gen else None
+
+        if mode_key in data and cat_key in categories and gen_key in genders:
+            data[mode_key][cat_key][gen_key] += count
+            data[mode_key]['Total'][gen_key] += count
+
+    return render_template('enrollment_summary.html',
+                           batch=batch_info,
+                           data=data,
+                           categories=categories,
+                           modes=modes)
 
 # Reports page with bar chart
 @app.route('/reports')
