@@ -18,7 +18,241 @@ app.secret_key = "your-very-secret-key"   # 👈 Add this line
 @app.route('/')
 def home():
     return render_template('home.html')
+#Placement 
+import pandas as pd
 
+PLACEMENT_CSV = os.path.join("data", "placement_records.csv")
+
+def load_placement_df():
+    if not os.path.exists(PLACEMENT_CSV):
+        df = pd.DataFrame(columns=["placement_id","student_id","company_name","package_lpa","job_type","year","role"])
+        df.to_csv(PLACEMENT_CSV, index=False)
+        return df
+    return pd.read_csv(PLACEMENT_CSV)
+
+def save_placement_df(df):
+    df.to_csv(PLACEMENT_CSV, index=False)
+
+def next_placement_id(df):
+    if df.empty:
+        return "pl_0001"
+    last = df["placement_id"].iloc[-1]
+    num = int(last.split("_")[1])
+    return f"pl_{num+1:04d}"
+
+from flask import request, render_template, redirect, url_for, flash
+
+@app.route("/placement")
+def placement_dashboard():
+    import os
+    import matplotlib
+    matplotlib.use("Agg")  # prevents GUI errors
+    import matplotlib.pyplot as plt
+
+    placement_df = load_placement_df()
+    students_df = pd.read_csv("data/students.csv")
+
+    # Filter 8th semester
+    final_year = students_df[students_df["year"] == 8]
+
+    if not placement_df.empty:
+        merged = placement_df.merge(final_year, on="student_id", how="inner")
+
+        total_placed = merged["student_id"].nunique()
+        gender_counts = merged["gender"].value_counts().to_dict()
+        median_salary = merged["package_lpa"].median()
+        table = merged.to_dict(orient="records")
+    else:
+        merged = pd.DataFrame()
+        total_placed = 0
+        gender_counts = {}
+        median_salary = None
+        table = []
+
+    # ========================= PIE CHART SECTION =========================
+
+    chart_file = None  # default
+
+    if gender_counts:  # only generate chart if data exists
+        labels = list(gender_counts.keys())
+        sizes = list(gender_counts.values())
+
+        # Make sure chart folder exists
+        charts_path = os.path.join("static", "charts")
+        os.makedirs(charts_path, exist_ok=True)
+
+        file_path = os.path.join(charts_path, "placement_gender.png")
+
+        # Generate chart
+        plt.figure(figsize=(4, 4))
+        plt.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=90)
+        plt.title("Placement Gender Distribution")
+        plt.tight_layout()
+
+        # Save image
+        plt.savefig(file_path)
+        plt.close()
+
+        chart_file = "charts/placement_gender.png"  # relative path for template
+
+    # =====================================================================
+
+    return render_template("placement.html",
+                           total_placed=total_placed,
+                           gender_counts=gender_counts,
+                           median_salary=median_salary,
+                           records=table,
+                           chart_file=chart_file)
+
+
+@app.route("/placement/add", methods=["GET","POST"])
+def placement_add():
+    if request.method == "POST":
+        df = load_placement_df()
+
+        new_row = {
+            "placement_id": next_placement_id(df),
+            "student_id": request.form.get("student_id"),
+            "company_name": request.form.get("company_name"),
+            "package_lpa": float(request.form.get("package_lpa")),
+            "job_type": request.form.get("job_type"),
+            "year": int(request.form.get("year")),
+            "role": request.form.get("role")
+        }
+
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        save_placement_df(df)
+
+        flash("Placement record added successfully!", "success")
+        return redirect(url_for("placement_dashboard"))
+
+    return render_template("placement_add.html")
+
+import os, json
+from flask import render_template, request, redirect, url_for, flash
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+# ---------- FILE PATHS ----------
+HOSTEL_BOYS_FILE = os.path.join("data", "hostel_boys.json")
+HOSTEL_GIRLS_FILE = os.path.join("data", "hostel_girls.json")
+
+
+# ---------- JSON HELPERS ----------
+def load_hostel(hostel_type):
+    path = HOSTEL_BOYS_FILE if hostel_type == "boys" else HOSTEL_GIRLS_FILE
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def save_hostel(hostel_type, data):
+    path = HOSTEL_BOYS_FILE if hostel_type == "boys" else HOSTEL_GIRLS_FILE
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
+
+
+# ---------- SUMMARY ----------
+def hostel_summary(data):
+    students = data["students"]
+    rooms = data["rooms"]
+
+    return {
+        "total_students": len(students),
+        "total_rooms": len(rooms),
+        "occupied_rooms": sum(1 for r in rooms if r["occupied"] > 0)
+    }
+
+
+# ---------- DASHBOARD ----------
+@app.route("/hostels")
+def hostel_dashboard():
+    boys = load_hostel("boys")
+    girls = load_hostel("girls")
+
+    return render_template(
+        "hostel_dashboard.html",
+        boys_stats=hostel_summary(boys),
+        girls_stats=hostel_summary(girls)
+    )
+
+
+# ---------- INDIVIDUAL HOSTEL PAGE WITH CHART ----------
+@app.route("/hostels/<hostel_type>")
+def hostel_details(hostel_type):
+    if hostel_type not in ["boys", "girls"]:
+        return "Invalid hostel.", 404
+
+    data = load_hostel(hostel_type)
+    students = data["students"]
+
+    paid = sum(1 for s in students if s["fee_paid"])
+    pending = len(students) - paid
+
+    # Pie Chart Generator
+    chart_file = None
+    if len(students) > 0:
+        labels = ["Fee Paid", "Pending"]
+        values = [paid, pending]
+
+        os.makedirs("static/charts", exist_ok=True)
+        chart_path = f"static/charts/{hostel_type}_fee.png"
+
+        plt.figure(figsize=(4,4))
+        plt.pie(values, labels=labels, autopct="%1.1f%%")
+        plt.title(hostel_type.capitalize() + " Hostel Fee Status")
+        plt.savefig(chart_path)
+        plt.close()
+
+        chart_file = f"charts/{hostel_type}_fee.png"
+
+    return render_template(
+        "hostel_detail.html",
+        hostel_type=hostel_type,
+        stats=hostel_summary(data),
+        students=data["students"],
+        rooms=data["rooms"],
+        staff=data["staff"],
+        chart_file=chart_file
+    )
+
+
+# ---------- ADD STUDENT ----------
+@app.route("/hostels/<hostel_type>/add", methods=["GET", "POST"])
+def add_hostel_student(hostel_type):
+    if request.method == "POST":
+        data = load_hostel(hostel_type)
+
+        new_entry = {
+            "roll_no": request.form["roll_no"],
+            "name": request.form["name"],
+            "address": request.form["address"],
+            "department": request.form["department"],
+            "room_no": request.form["room_no"],
+            "check_in": request.form["check_in"],
+            "check_out": request.form["check_out"],
+            "fee_paid": request.form.get("fee_paid") == "yes"
+        }
+
+        data["students"].append(new_entry)
+        save_hostel(hostel_type, data)
+
+        flash("Student added to hostel!", "success")
+        return redirect(url_for("hostel_details", hostel_type=hostel_type))
+
+    return render_template("hostel_add.html", hostel_type=hostel_type)
+
+
+# ---------- REMOVE STUDENT ----------
+@app.route("/hostels/<hostel_type>/delete/<roll>")
+def delete_hostel_student(hostel_type, roll):
+    data = load_hostel(hostel_type)
+
+    data["students"] = [s for s in data["students"] if s["roll_no"] != roll]
+
+    save_hostel(hostel_type, data)
+    flash("Student removed from hostel!", "warning")
+    return redirect(url_for("hostel_details", hostel_type=hostel_type))
 
 # Show all departments as cards
 @app.route('/departments')

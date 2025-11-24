@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+
+<h2 class="text-center">{{ hostel_type|capitalize }} Hostel</h2>
+
+<a href="{{ url_for('add_hostel_student', hostel_type=hostel_type) }}" class="btn btn-success mt-3 mb-4">
+➕ Add Student
+</a>
+
+<!-- Chart -->
+{% if chart_file %}
+<div class="text-center mb-5">
+  <img src="{{ url_for('static', filename=chart_file) }}" width="300" class="shadow rounded">
+</div>
+{% endif %}
+
+<!-- Students Table -->
+<h4>Students</h4>
+<table class="table table-bordered mt-3">
+<thead>
+<tr>
+  <th>Roll No</th><th>Name</th><th>Department</th><th>Room</th><th>Fee</th><th>Action</th>
+</tr>
+</thead>
+<tbody>
+{% for s in students %}
+<tr>
+  <td>{{ s.roll_no }}</td>
+  <td>{{ s.name }}</td>
+  <td>{{ s.department }}</td>
+  <td>{{ s.room_no }}</td>
+  <td>{{ "Paid" if s.fee_paid else "Pending" }}</td>
+  <td>
+    <a href="{{ url_for('delete_hostel_student', hostel_type=hostel_type, roll=s.roll_no) }}" 
+       class="btn btn-danger btn-sm">Delete</a>
+  </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+</div>
+{% endblock %}

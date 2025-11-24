@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+
+<h2 class="text-center mb-4">Hostel Management</h2>
+
+<div class="row">
+
+  <!-- Boys Hostel -->
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <img src="{{ url_for('static', filename='images/boys_hostel.jpg') }}" class="card-img-top">
+      <div class="card-body">
+        <h4>Boys Hostel</h4>
+        <p>Total Students: {{ boys_stats.total_students }}</p>
+        <p>Rooms: {{ boys_stats.total_rooms }}</p>
+        <a href="{{ url_for('hostel_details', hostel_type='boys') }}" class="btn btn-primary">View</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Girls Hostel -->
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm">
+      <img src="{{ url_for('static', filename='images/girls_hostel.jpg') }}" class="card-img-top">
+      <div class="card-body">
+        <h4>Girls Hostel</h4>
+        <p>Total Students: {{ girls_stats.total_students }}</p>
+        <p>Rooms: {{ girls_stats.total_rooms }}</p>
+        <a href="{{ url_for('hostel_details', hostel_type='girls') }}" class="btn btn-primary">View</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+{% endblock %}

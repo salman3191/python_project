@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+
+  <h2 class="mb-4">Placement Dashboard</h2>
+<div class="container mt-4">
+  <div class="row mb-4">
+
+  <!-- Total placed -->
+  <div class="col-md-4">
+    <div class="card text-center p-3 shadow-sm border-0 rounded-4 salary-card">
+      <h5 class="text-muted mb-2">Total Placed Students</h5>
+      <h2 class="fw-bold text-primary">{{ total_placed }}</h2>
+    </div>
+  </div>
+
+  <!-- Median salary -->
+  <div class="col-md-4">
+    <div class="card text-center p-3 shadow-sm border-0 rounded-4 salary-card">
+      <h5 class="text-muted mb-2">Median Salary (LPA)</h5>
+      <h2 class="fw-bold text-primary">{{ median_salary }}</h2>
+    </div>
+  </div>
+
+  <!-- Gender counts -->
+  <div class="col-md-4">
+    <div class="card text-center p-3 shadow-sm border-0 rounded-4 salary-card">
+      <h5 class="text-muted mb-2">Placement by Gender</h5>
+      <p class="mb-0">Male: {{ gender_counts.get('Male', 0) }}</p>
+      <p class="mb-0">Female: {{ gender_counts.get('Female', 0) }}</p>
+      <p class="mb-0">Transgender: {{ gender_counts.get('Transgender', 0) }}</p>
+    </div>
+  </div>
+</div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <a href="{{ url_for('placement_add') }}" class="btn btn-primary mb-3">Add Placement</a>
+  
+  <hr>
+  <table class="table table-bordered" margin="30px">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Company</th>
+        <th>Role</th>
+        <th>Package (LPA)</th>
+        <th>Job Type</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td>{{ r.student_id }} - {{ r.name }}</td>
+        <td>{{ r.company_name }}</td>
+        <td>{{ r.role }}</td>
+        <td>{{ r.package_lpa }}</td>
+        <td>{{ r.job_type }}</td>
+        <td>{{ r.year_x }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    
+  </table>
+ {% if chart_file %}
+<div class="text-center my-4">
+  <h4>Gender Placement Chart</h4>
+  <img src="{{ url_for('static', filename=chart_file) }}" width="350" class="img-fluid rounded shadow">
+</div>
+{% else %}
+<p class="text-muted text-center">No placement data available to generate chart.</p>
+{% endif %}
+
+
+
+</div>
+{% endblock %}

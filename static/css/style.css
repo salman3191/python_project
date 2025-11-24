@@ -8,6 +8,23 @@
   padding: 10px 0;
   height: auto;
 }
+/* Push all content below fixed navbar */
+body {
+  padding-top: 80px;  /* adjust if your navbar is taller/shorter */
+}
+.salary-card {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.salary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+td, th,tr {
+  border: 1px solid black;
+  padding: 15px; /* space inside cells */
+}
 
 .container-fluid .footer p {
   margin: 0; /* remove default spacing */
