@@ -120,7 +120,7 @@
   margin-top: 90px;
 }
 #flash {
-  margin-top: 100px;
+  margin-top: 90px;
 }
 
 #courseheading {
@@ -143,4 +143,42 @@
 }
 #lst {
   margin-right: 5px;
+}
+
+.salary-card {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.salary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+td,
+th,
+tr {
+  border: 1px solid black;
+  padding: 15px; /* space inside cells */
+}
+
+#hostel {
+  margin-top: 90px;
+}
+#placement {
+  margin-top: 90px;
+}
+
+#haris {
+  margin-right: 10px;
+  margin-left: 20px;
+}
+#hostelha {
+  margin-top: 90px;
+}
+
+#student {
+  margin-top: 60px;
+}
+#flashmessage {
+  margin-top: 90px;
 }

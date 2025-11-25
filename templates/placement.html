@@ -1,0 +1,87 @@
+{% extends "base.html" %} {% block content %}
+<div class="container my-5" id="plc">
+  <h2 class="mb-4 fw-bold text-center" id="placement">Placement Dashboard</h2>
+
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-5">
+    <!-- Total Placed -->
+    <div class="col-md-4">
+      <div class="card text-center p-4 shadow-sm border-0 rounded-4">
+        <h6 class="text-muted mb-2">Total Placed Students</h6>
+        <h2 class="fw-bold text-primary">{{ total_placed }}</h2>
+      </div>
+    </div>
+
+    <!-- Median Salary -->
+    <div class="col-md-4">
+      <div class="card text-center p-4 shadow-sm border-0 rounded-4">
+        <h6 class="text-muted mb-2">Median Salary (LPA)</h6>
+        <h2 class="fw-bold text-primary">{{ median_salary }}</h2>
+      </div>
+    </div>
+
+    <!-- Gender Counts -->
+    <div class="col-md-4">
+      <div class="card text-center p-4 shadow-sm border-0 rounded-4">
+        <h6 class="text-muted mb-2">Placement by Gender</h6>
+        <p class="mb-1">Male: {{ gender_counts.get('Male', 0) }}</p>
+        <p class="mb-1">Female: {{ gender_counts.get('Female', 0) }}</p>
+        <p class="mb-0">
+          Transgender: {{ gender_counts.get('Transgender', 0) }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Placement Button -->
+  <div class="d-flex justify-content-end mb-4">
+    <a href="{{ url_for('placement_add') }}" class="btn btn-primary"
+      >Add Placement</a
+    >
+  </div>
+
+  <!-- Placement Table -->
+  <div class="table-responsive mb-5">
+    <table class="table table-bordered table-hover table-striped align-middle">
+      <thead class="table-light sticky-top">
+        <tr>
+          <th>Student</th>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Package (LPA)</th>
+          <th>Job Type</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.student_id }} - {{ r.name }}</td>
+          <td>{{ r.company_name }}</td>
+          <td>{{ r.role }}</td>
+          <td>{{ r.package_lpa }}</td>
+          <td>{{ r.job_type }}</td>
+          <td>{{ r.year_x }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Chart Section -->
+  {% if chart_file %}
+  <div class="text-center my-5">
+    <h4 class="mb-3">Gender Placement Chart</h4>
+    <img
+      src="{{ url_for('static', filename=chart_file) }}"
+      width="350"
+      class="img-fluid rounded shadow"
+    />
+  </div>
+  {% else %}
+  <p class="text-muted text-center my-5">
+    No placement data available to generate chart.
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

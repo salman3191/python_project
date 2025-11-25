@@ -9,13 +9,13 @@ class Student(db.Model):
     name = db.Column(db.String(100), nullable=True)
     gender = db.Column(db.Enum('Male', 'Female', 'Transgender'), nullable=True)
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable=True)
-    enrollment_no = db.Column(db.String(20), nullable=True)
+    enrollment_no = db.Column(db.String(20),nullable=True, unique=True)
     registration_no = db.Column(db.String(30), nullable=True)
     parentage = db.Column(db.String(100), nullable=True)
     dob = db.Column(db.Date, nullable=True)
     category = db.Column(db.String(20), nullable=True)
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'), nullable=True)
-    mode = db.Column(db.Enum('Regular', 'Distance'), default='Regular')
+    mode = db.Column(db.Enum('Regular', 'Di stance'), default='Regular')
 
     # Relationships
     department = db.relationship('Department', backref='students', lazy=True)

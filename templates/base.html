@@ -53,12 +53,26 @@
               <a class="nav-link" href="{{ url_for('departments') }}"
                 >Departments</a
               >
+               <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('placement_dashboard') }}">Placements</a>
+            </li>
+              
+               <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('hostel_dashboard') }}">Hostel</a>
+            </li>
+            </li>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('teacher_login') }}"
                 >Office Use</a
               >
             </li>
+             <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('scholarships') }}"
+                >Scholarship</a
+              >
+            </li>
+
             <li class="nav-item">
               <a class="nav-link" href="/reports">Reports</a>
             </li>
@@ -68,7 +82,7 @@
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %}
-    <div class="container mt-3">
+    <div class="container-fluid "id=flashmessage>
       {% for category, message in messages %}
       <div
         class="alert alert-{{ category }} alert-dismissible fade show"
